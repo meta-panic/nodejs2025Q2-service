@@ -13,7 +13,7 @@ export class UsersService implements IUsersService {
   constructor(
     @Inject(USER_REPO)
     private readonly userRepo: IUserRepo,
-  ) { }
+  ) {}
 
   findAll() {
     const responce = this.userRepo.findAll().map((user) => {

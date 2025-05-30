@@ -6,7 +6,7 @@ export class InMemoryRepo<T extends { id: string }> implements IRepo<T> {
   protected entities: Map<string, T> = new Map();
 
   findAll(): T[] {
-    return Array.from(this.entities, ([name, value]) => value);
+    return Array.from(this.entities, ([, value]) => value);
   }
 
   findById(id: string): T {

@@ -1,6 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
-
 export class UpdateArtistDto {
   @IsNotEmpty()
   @IsString()
@@ -10,4 +9,3 @@ export class UpdateArtistDto {
   @IsBoolean()
   grammy: boolean;
 }
-

@@ -28,4 +28,4 @@ import { FavoriteModule } from '../favorites/favorites.module';
     forwardRef(() => FavoriteModule),
   ],
 })
-export class ArtistModule { }
+export class ArtistModule {}

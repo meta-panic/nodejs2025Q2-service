@@ -2,7 +2,6 @@ import { Expose } from 'class-transformer';
 
 import { Artist } from '../model/Artist.model';
 
-
 export class ReturnArtistDto {
   @Expose()
   id: string;
@@ -17,4 +16,3 @@ export class ReturnArtistDto {
     Object.assign(this, partial);
   }
 }
-
