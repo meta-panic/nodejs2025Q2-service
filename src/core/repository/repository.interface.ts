@@ -1,4 +1,3 @@
-
 export interface IRepo<T extends { id: string }> {
   findAll(): T[];
   findById(id: string): T;

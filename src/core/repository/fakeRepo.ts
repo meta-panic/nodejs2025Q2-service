@@ -1,13 +1,12 @@
-import { NotFoundException } from "@nestjs/common"
+import { NotFoundException } from '@nestjs/common';
 
-import { IRepo } from "./repository.interface"
-
+import { IRepo } from './repository.interface';
 
 export class InMemoryRepo<T extends { id: string }> implements IRepo<T> {
   protected entities: Map<string, T> = new Map();
 
   findAll(): T[] {
-    return Array.from(this.entities, ([name, value]) => (value));
+    return Array.from(this.entities, ([name, value]) => value);
   }
 
   findById(id: string): T {
