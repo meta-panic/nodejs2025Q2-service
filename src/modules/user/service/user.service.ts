@@ -1,10 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 
 import { IUserRepo, USER_REPO } from '../repository/user.repository.interface';
 import { generateUUID } from 'src/core/utils';
 import { User } from '../model/User.model';
 import { IUsersService } from './user.service.interface';
+import { plainToInstance } from 'class-transformer';
+import { ReturnUserDto } from '../dto/return-user';
 
 
 @Injectable()
@@ -15,7 +17,13 @@ export class UsersService implements IUsersService {
   ) { }
 
   findAll() {
-    return this.userRepo.findAll();
+    const responce = this.userRepo.findAll().map((user) => {
+      return plainToInstance(ReturnUserDto, user, {
+        excludeExtraneousValues: true,
+      });
+    })
+
+    return responce;
   }
 
   findOne(id: string) {
@@ -23,13 +31,15 @@ export class UsersService implements IUsersService {
 
     if (!user) throw new NotFoundException('User Not Found')
 
-    return user;
+    return plainToInstance(ReturnUserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   create(data: { login: string; password: string }) {
     const currentDate = Date.now();
 
-    this.userRepo.create({
+    return this.userRepo.create({
       login: data.login,
       password: data.password,
       id: generateUUID(),
@@ -45,6 +55,22 @@ export class UsersService implements IUsersService {
 
   delete(id: string) {
     const isSuccess = this.userRepo.delete(id);
+
     return isSuccess;
+  }
+
+  updatePassword(id: string, { oldPassword, newPassword }: { oldPassword: string, newPassword: string }) {
+    const user = this.userRepo.findById(id)
+
+    if (user.password !== oldPassword) {
+      throw new ForbiddenException('Old password is not correct.');
+    }
+
+    const result = this.userRepo.update(id, { password: newPassword });
+    this.userRepo.update(id, { version: user.version + 1, updatedAt: Date.now() })
+
+    return plainToInstance(ReturnUserDto, result, {
+      excludeExtraneousValues: true,
+    });
   }
 }

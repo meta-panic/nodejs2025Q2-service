@@ -4,10 +4,10 @@ import { IRepo } from "./repository.interface"
 
 
 export class InMemoryRepo<T extends { id: string }> implements IRepo<T> {
-  private entities: Map<string, T> = new Map();
+  protected entities: Map<string, T> = new Map();
 
-  findAll(): string[] {
-    return Array.from(this.entities.keys()).map(id => id.toString());
+  findAll(): T[] {
+    return Array.from(this.entities, ([name, value]) => (value));
   }
 
   findById(id: string): T {
@@ -25,10 +25,10 @@ export class InMemoryRepo<T extends { id: string }> implements IRepo<T> {
     return newEntity;
   }
 
-  update(id: string, props: Partial<T>): T {
+  update(id: string, props: Omit<Partial<T>, 'id'>): T {
     const entity = this.entities.get(id);
     if (!entity) {
-      throw new Error(`Entity with id ${id} not found`);
+      throw new NotFoundException(`Entity with id ${id} not found`);
     }
 
     const updatedEntity = { ...entity, ...props, id } as T;
@@ -38,6 +38,11 @@ export class InMemoryRepo<T extends { id: string }> implements IRepo<T> {
   }
 
   delete(id: string): boolean {
+    const entity = this.entities.get(id);
+    if (!entity) {
+      throw new NotFoundException(`Entity with id ${id} not found`);
+    }
+
     return this.entities.delete(id);
   }
 }
