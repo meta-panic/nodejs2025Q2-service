@@ -6,6 +6,7 @@ import { ARTIST_SERVICE } from './service/artist.service.interface';
 import { ArtistController } from './artist.controller';
 import { ARTIST_REPO } from './repository/artist.repository.interface';
 import { AlbumModule } from '../album/album.module';
+import { TrackModule } from '../track/track.module';
 
 @Module({
   controllers: [ArtistController],
@@ -19,6 +20,6 @@ import { AlbumModule } from '../album/album.module';
       useClass: InMemoryArtistRepository,
     },
   ],
-  imports: [forwardRef(() => AlbumModule)],
+  imports: [forwardRef(() => AlbumModule), forwardRef(() => TrackModule)],
 })
 export class ArtistModule { }

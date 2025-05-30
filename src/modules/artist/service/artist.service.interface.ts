@@ -1,5 +1,4 @@
-import { Artist } from "../model/Artist.model";
-
+import { Artist } from '../model/Artist.model';
 
 export interface IArtistService {
   findAll(): Artist[];
@@ -10,4 +9,3 @@ export interface IArtistService {
 }
 
 export const ARTIST_SERVICE = 'ARTIST_SERVICE';
-

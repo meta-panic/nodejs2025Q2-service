@@ -12,6 +12,8 @@ import { IArtistService } from './artist.service.interface';
 import { Artist } from '../model/Artist.model';
 import { AlbumService } from 'src/modules/album/service/album.service';
 import { ALBUM_SERVICE } from 'src/modules/album/service/album.service.interface';
+import { TrackService } from 'src/modules/track/service/track.service';
+import { TRACK_SERVICE } from 'src/modules/track/service/track.service.interface';
 
 @Injectable()
 export class ArtistService implements IArtistService {
@@ -20,7 +22,9 @@ export class ArtistService implements IArtistService {
     private readonly artistRepo: IArtistRepo,
     @Inject(forwardRef(() => ALBUM_SERVICE))
     private readonly albumService: AlbumService,
-  ) { }
+    @Inject(forwardRef(() => TRACK_SERVICE))
+    private readonly trackService: TrackService,
+  ) { } // prettier-ignore
 
   findAll() {
     const responce = this.artistRepo.findAll().map((user) => {
@@ -59,6 +63,7 @@ export class ArtistService implements IArtistService {
 
     if (isSuccess) {
       nullifyEntityInField(this.albumService, id, 'artistId');
+      nullifyEntityInField(this.trackService, id, 'artistId');
     }
 
     return isSuccess;

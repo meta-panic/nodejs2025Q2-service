@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
-import { generateUUID } from 'src/core/utils';
+import { generateUUID, nullifyEntityInField } from 'src/core/utils';
 import { ReturnAlbumDto } from '../dto/return-album';
 import { IAlbumService } from './album.service.interface';
 import {
@@ -10,12 +10,16 @@ import {
   IAlbumRepo,
 } from '../repository/album.repository.interface';
 import { Album } from '../model/Album.model';
+import { TrackService } from 'src/modules/track/service/track.service';
+import { TRACK_SERVICE } from 'src/modules/track/service/track.service.interface';
 
 @Injectable()
 export class AlbumService implements IAlbumService {
   constructor(
     @Inject(ALBUM_REPO)
     private readonly albumRepo: IAlbumRepo,
+    @Inject(forwardRef(() => TRACK_SERVICE))
+    private readonly trackService: TrackService,
   ) { } // prettier-ignore
 
   findAll() {
@@ -51,6 +55,10 @@ export class AlbumService implements IAlbumService {
 
   delete(id: string) {
     const isSuccess = this.albumRepo.delete(id);
+
+    if (isSuccess) {
+      nullifyEntityInField(this.trackService, id, 'albumId');
+    }
 
     return isSuccess;
   }
