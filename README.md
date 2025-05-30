@@ -1,5 +1,11 @@
 # Home Library Service
 
+## Prerequisites
+
+Before running the application, ensure you have Node.js (22.x.x since 22.14.0) installed.
+
+This project uses environment variables for configuration. A `.env.example` file is provided in the root directory. Copy this file and rename it to `.env`. Update the variables in the `.env` file according to your environment if necessary.
+
 ## Downloading
 
 ```
