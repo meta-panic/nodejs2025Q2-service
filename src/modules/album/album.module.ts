@@ -18,5 +18,6 @@ import { AlbumService } from './service/album.service';
       useClass: InMemoryAlbumRepository,
     },
   ],
+  exports: [ALBUM_SERVICE]
 })
 export class AlbumModule { } // prettier-ignore

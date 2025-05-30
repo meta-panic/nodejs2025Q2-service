@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { InMemoryArtistRepository } from './repository/artist.repository';
 import { ArtistService } from './service/artist.service';
 import { ARTIST_SERVICE } from './service/artist.service.interface';
 import { ArtistController } from './artist.controller';
 import { ARTIST_REPO } from './repository/artist.repository.interface';
-
+import { AlbumModule } from '../album/album.module';
 
 @Module({
   controllers: [ArtistController],
@@ -17,8 +17,8 @@ import { ARTIST_REPO } from './repository/artist.repository.interface';
     {
       provide: ARTIST_REPO,
       useClass: InMemoryArtistRepository,
-    }
+    },
   ],
+  imports: [forwardRef(() => AlbumModule)],
 })
 export class ArtistModule { }
-
