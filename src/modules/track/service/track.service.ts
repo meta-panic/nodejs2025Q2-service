@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
@@ -10,12 +10,16 @@ import {
   ITrackRepo,
 } from '../repository/track.repository.interface';
 import { Track } from '../model/Track.model';
+import { FavoriteService } from 'src/modules/favorites/service/favorite.service';
+import { FAVORITE_SERVICE } from 'src/modules/favorites/service/favorite.service.interface';
 
 @Injectable()
 export class TrackService implements ITrackService {
   constructor(
     @Inject(TRACK_REPO)
     private readonly trackRepo: ITrackRepo,
+    @Inject(forwardRef(() => FAVORITE_SERVICE))
+    private readonly favoriteService: FavoriteService,
   ) { } // prettier-ignore
 
   findAll() {
@@ -56,6 +60,14 @@ export class TrackService implements ITrackService {
 
   delete(id: string) {
     const isSuccess = this.trackRepo.delete(id);
+
+    if (isSuccess) {
+      try {
+        this.favoriteService.deleteTrack(id);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     return isSuccess;
   }

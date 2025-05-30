@@ -12,6 +12,8 @@ import {
 import { Album } from '../model/Album.model';
 import { TrackService } from 'src/modules/track/service/track.service';
 import { TRACK_SERVICE } from 'src/modules/track/service/track.service.interface';
+import { FavoriteService } from 'src/modules/favorites/service/favorite.service';
+import { FAVORITE_SERVICE } from 'src/modules/favorites/service/favorite.service.interface';
 
 @Injectable()
 export class AlbumService implements IAlbumService {
@@ -20,6 +22,8 @@ export class AlbumService implements IAlbumService {
     private readonly albumRepo: IAlbumRepo,
     @Inject(forwardRef(() => TRACK_SERVICE))
     private readonly trackService: TrackService,
+    @Inject(forwardRef(() => FAVORITE_SERVICE))
+    private readonly favoriteService: FavoriteService,
   ) { } // prettier-ignore
 
   findAll() {
@@ -33,11 +37,11 @@ export class AlbumService implements IAlbumService {
   }
 
   findOne(id: string) {
-    const user = this.albumRepo.findById(id);
+    const album = this.albumRepo.findById(id);
 
-    if (!user) throw new NotFoundException('User Not Found');
+    if (!album) throw new NotFoundException('Album Not Found');
 
-    return plainToInstance(ReturnAlbumDto, user, {
+    return plainToInstance(ReturnAlbumDto, album, {
       excludeExtraneousValues: true,
     });
   }
@@ -57,7 +61,12 @@ export class AlbumService implements IAlbumService {
     const isSuccess = this.albumRepo.delete(id);
 
     if (isSuccess) {
-      nullifyEntityInField(this.trackService, id, 'albumId');
+      try {
+        nullifyEntityInField(this.trackService, id, 'albumId');
+        this.favoriteService.deleteAlbum(id);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     return isSuccess;

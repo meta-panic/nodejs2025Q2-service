@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { InMemoryTrackRepository } from './repository/track.repository';
 import { TrackController } from './track.controller';
 import { TRACK_REPO } from './repository/track.repository.interface';
 import { TRACK_SERVICE } from './service/track.service.interface';
 import { TrackService } from './service/track.service';
+import { FavoriteModule } from '../favorites/favorites.module';
 
 @Module({
   controllers: [TrackController],
@@ -18,6 +19,7 @@ import { TrackService } from './service/track.service';
       useClass: InMemoryTrackRepository,
     },
   ],
-  exports: [TRACK_SERVICE]
+  exports: [TRACK_SERVICE],
+  imports: [forwardRef(() => FavoriteModule)],
 })
 export class TrackModule { } // prettier-ignore

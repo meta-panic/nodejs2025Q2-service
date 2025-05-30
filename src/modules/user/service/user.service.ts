@@ -8,12 +8,11 @@ import { IUsersService } from './user.service.interface';
 import { plainToInstance } from 'class-transformer';
 import { ReturnUserDto } from '../dto/return-user';
 
-
 @Injectable()
 export class UsersService implements IUsersService {
   constructor(
     @Inject(USER_REPO)
-    private readonly userRepo: IUserRepo
+    private readonly userRepo: IUserRepo,
   ) { }
 
   findAll() {
@@ -21,15 +20,15 @@ export class UsersService implements IUsersService {
       return plainToInstance(ReturnUserDto, user, {
         excludeExtraneousValues: true,
       });
-    })
+    });
 
     return responce;
   }
 
   findOne(id: string) {
-    const user = this.userRepo.findById(id)
+    const user = this.userRepo.findById(id);
 
-    if (!user) throw new NotFoundException('User Not Found')
+    if (!user) throw new NotFoundException('User Not Found');
 
     return plainToInstance(ReturnUserDto, user, {
       excludeExtraneousValues: true,
@@ -45,12 +44,12 @@ export class UsersService implements IUsersService {
       id: generateUUID(),
       updatedAt: currentDate,
       createdAt: currentDate,
-      version: 1
+      version: 1,
     });
   }
 
   update(id: string, updateProps: Partial<User>) {
-    this.userRepo.update(id, updateProps)
+    this.userRepo.update(id, updateProps);
   }
 
   delete(id: string) {
@@ -59,15 +58,21 @@ export class UsersService implements IUsersService {
     return isSuccess;
   }
 
-  updatePassword(id: string, { oldPassword, newPassword }: { oldPassword: string, newPassword: string }) {
-    const user = this.userRepo.findById(id)
+  updatePassword(
+    id: string,
+    { oldPassword, newPassword }: { oldPassword: string; newPassword: string },
+  ) {
+    const user = this.userRepo.findById(id);
 
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Old password is not correct.');
     }
 
     const result = this.userRepo.update(id, { password: newPassword });
-    this.userRepo.update(id, { version: user.version + 1, updatedAt: Date.now() })
+    this.userRepo.update(id, {
+      version: user.version + 1,
+      updatedAt: Date.now(),
+    });
 
     return plainToInstance(ReturnUserDto, result, {
       excludeExtraneousValues: true,

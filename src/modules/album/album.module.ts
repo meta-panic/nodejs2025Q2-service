@@ -6,6 +6,7 @@ import { ALBUM_REPO } from './repository/album.repository.interface';
 import { ALBUM_SERVICE } from './service/album.service.interface';
 import { AlbumService } from './service/album.service';
 import { TrackModule } from '../track/track.module';
+import { FavoriteModule } from '../favorites/favorites.module';
 
 @Module({
   controllers: [AlbumController],
@@ -20,6 +21,6 @@ import { TrackModule } from '../track/track.module';
     },
   ],
   exports: [ALBUM_SERVICE],
-  imports: [forwardRef(() => TrackModule)],
+  imports: [forwardRef(() => TrackModule), forwardRef(() => FavoriteModule)],
 })
 export class AlbumModule { } // prettier-ignore

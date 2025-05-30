@@ -12,7 +12,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { ReturnUserDto } from '../user/dto/return-user';
 import { CreateAlbumDto } from './dto/create-album';
 import { UpdateAlbumDto } from './dto/update-album';
 import { ALBUM_SERVICE } from './service/album.service.interface';
