@@ -8,5 +8,5 @@ import { ITrackRepo } from './track.repository.interface';
 /* eslint-disable prettier/prettier */
 export class InMemoryTrackRepository
   extends InMemoryRepo<Track>
-  implements ITrackRepo { }
+  implements ITrackRepo {}
 /* eslint-enable prettier/prettier */
