@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  //output   = "../generated/prisma"
 }
 
 datasource db {
@@ -30,7 +30,7 @@ model Artist {
 
   albums     Album[]     @relation("ArtistAlbums")
   tracks     Track[]     @relation("ArtistTracks")
-  favArtists FavArtist[] @relation("FavArtistToArtists") // Many-to-many relation to FavArtist
+  favArtists Favorites[] @relation("FavoritesArtists")
 }
 
 model Album {
@@ -39,9 +39,9 @@ model Album {
   year     Int
   artistId String? // nullable, refers to Artist
 
-  artist    Artist?    @relation("ArtistAlbums", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
-  tracks    Track[]    @relation("AlbumTracks")
-  favAlbums FavAlbum[] @relation("FavAlbumToAlbums") // Many-to-many relation to FavAlbum
+  artist    Artist?     @relation("ArtistAlbums", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  tracks    Track[]     @relation("AlbumTracks")
+  favAlbums Favorites[] @relation("FavoritesAlbums")
 }
 
 model Track {
@@ -51,22 +51,14 @@ model Track {
   albumId  String? // nullable, refers to Album
   duration Int
 
-  artist    Artist?    @relation("ArtistTracks", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
-  album     Album?     @relation("AlbumTracks", fields: [albumId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for album
-  favTracks FavTrack[] @relation("FavTrackToTracks") // Many-to-many relation to FavTrack
+  artist    Artist?     @relation("ArtistTracks", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  album     Album?      @relation("AlbumTracks", fields: [albumId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for album
+  favTracks Favorites[] @relation("FavoritesTracks")
 }
 
-model FavTrack {
-  id     String  @id @default("singleton") // Always use the same id
-  tracks Track[] @relation("FavTrackToTracks") // Many-to-many relation
-}
-
-model FavAlbum {
-  id     String  @id @default("singleton") // Always use the same id
-  albums Album[] @relation("FavAlbumToAlbums") // Many-to-many relation
-}
-
-model FavArtist {
-  id      String   @id @default("singleton") // Always use the same id
-  artists Artist[] @relation("FavArtistToArtists") // Many-to-many relation
+model Favorites {
+  id      String   @id @default("global")
+  artists Artist[] @relation("FavoritesArtists")
+  albums  Album[]  @relation("FavoritesAlbums")
+  tracks  Track[]  @relation("FavoritesTracks")
 }

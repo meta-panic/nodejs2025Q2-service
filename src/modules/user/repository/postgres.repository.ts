@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../model/User.model';
 import { IUserRepo } from './user.repository.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from 'generated/prisma/runtime/library';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class PostgresUserRepository implements IUserRepo {
@@ -36,9 +36,7 @@ export class PostgresUserRepository implements IUserRepo {
   }
 
   async delete(id: string): Promise<boolean> {
-    console.log("delete user - ", id)
     const user = await this.prisma.user.findUnique({ where: { id } });
-    console.log(" user - ", user)
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -46,7 +44,6 @@ export class PostgresUserRepository implements IUserRepo {
 
     try {
       await this.prisma.user.delete({ where: { id } });
-      console.log(" true - ")
       return true;
     } catch (error) {
       if (

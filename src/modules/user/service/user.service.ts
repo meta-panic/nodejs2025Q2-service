@@ -69,13 +69,10 @@ export class UsersService implements IUsersService {
     }
 
     const result = await this.userRepo.update(id, { password: newPassword });
-    console.log("old createdAt - ", user.createdAt)
-    console.log("old updatedAt - ", user.updatedAt)
     await this.userRepo.update(id, {
       version: user.version + 1,
       updatedAt: generateTimestamp(),
     });
-    console.log("new - ", user.updatedAt)
 
     return plainToInstance(ReturnUserDto, result, {
       excludeExtraneousValues: true,

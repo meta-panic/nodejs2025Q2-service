@@ -65,8 +65,6 @@ export class ArtistService implements IArtistService {
   async delete(id: string) {
     const isSuccess = await this.artistRepo.delete(id);
 
-    console.log("isSuccess - ", isSuccess)
-
     return isSuccess;
   }
 }

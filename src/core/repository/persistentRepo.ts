@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 
 import { IRepoAsync } from './repository.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from 'generated/prisma/runtime/library';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 
 export class PersistentRepo<T extends { id: string }> implements IRepoAsync<T> {
@@ -39,12 +39,7 @@ export class PersistentRepo<T extends { id: string }> implements IRepoAsync<T> {
 
 
   async delete(id: string): Promise<boolean> {
-    console.log(`delete id ${id} by prisma.${this.entityName} `)
-    //const entity = await this.prisma[this.entityName].findUnique({ where: { id } });
     const entity = await this.prisma[this.entityName].findUnique({ where: { id: id } });
-
-    console.log(`entity - ${entity} `)
-
 
     if (!entity) {
       throw new NotFoundException(`Entity with id ${id} not found`);
