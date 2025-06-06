@@ -9,14 +9,14 @@ export function generateUUID(): string {
 }
 
 type Services = IAlbumService | IArtistService | IUsersService | ITrackService;
-export function nullifyEntityInField(
+export async function nullifyEntityInField(
   service: Services,
   entityId: string,
   fieldId: string,
-): void {
-  const relatedEntities = service
-    .findAll()
-    .filter((record) => record[fieldId] === entityId);
+): Promise<void> {
+  const relatedEntities = (await service.findAll()).filter(
+    (record) => record[fieldId] === entityId,
+  );
 
   if (relatedEntities.length) {
     relatedEntities.forEach(({ id: recordId }) => {

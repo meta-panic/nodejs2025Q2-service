@@ -3,23 +3,13 @@ FROM node:22
 WORKDIR /usr/app
 
 COPY package*.json .
-
-RUN echo "ls -la"
-RUN ls -la /usr/app
-RUN echo "COPY . ."
 COPY . .
 
 # Add a step to remove node_modules if it was accidentally copied
 RUN echo "rm -rf node_*****modules"
 RUN rm -rf node_modules
 
-RUN echo "ls -la"
-RUN ls -la /usr/app
 RUN npm ci
-
-RUN echo "ls -la"
-RUN ls -la /usr/app
+RUN npx prisma generate
 
 RUN npm run prebuild
-
-CMD npm run start:dev

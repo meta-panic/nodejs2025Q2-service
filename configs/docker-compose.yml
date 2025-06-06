@@ -4,20 +4,23 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
     build:
       context: ../
-      dockerfile: dev-config/Dockerfile.backend
+      dockerfile: configs/Dockerfile.backend
     ports:
       - "4000:4000"
     volumes:
       - ${DEV_BACKEND_SRC_PATH}/src:/usr/app/src
+      - ${DEV_BACKEND_SRC_PATH}/prisma:/usr/app/prisma
+      - ${DEV_BACKEND_SRC_PATH}/test:/usr/app/test
     environment:
       PORT: ${PORT}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_HOST: db
       DATABASE_CLIENT: postgres
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:${DATABASE_PORT}/${DATABASE_NAME}
       WDS_SOCKET_HOST: 127.0.0.1
       CHOKIDAR_USEPOLLING: 1
       TS_NODE_DEV: true

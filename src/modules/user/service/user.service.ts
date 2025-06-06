@@ -13,10 +13,10 @@ export class UsersService implements IUsersService {
   constructor(
     @Inject(USER_REPO)
     private readonly userRepo: IUserRepo,
-  ) {}
+  ) { }
 
-  findAll() {
-    const responce = this.userRepo.findAll().map((user) => {
+  async findAll() {
+    const responce = (await this.userRepo.findAll()).map((user) => {
       return plainToInstance(ReturnUserDto, user, {
         excludeExtraneousValues: true,
       });
@@ -25,8 +25,8 @@ export class UsersService implements IUsersService {
     return responce;
   }
 
-  findOne(id: string) {
-    const user = this.userRepo.findById(id);
+  async findOne(id: string) {
+    const user = await this.userRepo.findById(id);
 
     if (!user) throw new NotFoundException('User Not Found');
 
@@ -35,10 +35,10 @@ export class UsersService implements IUsersService {
     });
   }
 
-  create(data: { login: string; password: string }) {
+  async create(data: { login: string; password: string }) {
     const currentDate = Date.now();
 
-    return this.userRepo.create({
+    return await this.userRepo.create({
       login: data.login,
       password: data.password,
       id: generateUUID(),
@@ -48,8 +48,8 @@ export class UsersService implements IUsersService {
     });
   }
 
-  update(id: string, updateProps: Partial<User>) {
-    this.userRepo.update(id, updateProps);
+  async update(id: string, updateProps: Partial<User>) {
+    await this.userRepo.update(id, updateProps);
   }
 
   delete(id: string) {
@@ -58,11 +58,11 @@ export class UsersService implements IUsersService {
     return isSuccess;
   }
 
-  updatePassword(
+  async updatePassword(
     id: string,
     { oldPassword, newPassword }: { oldPassword: string; newPassword: string },
   ) {
-    const user = this.userRepo.findById(id);
+    const user = await this.userRepo.findById(id);
 
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Old password is not correct.');
