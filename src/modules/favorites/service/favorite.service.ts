@@ -36,9 +36,9 @@ export class FavoriteService implements IFavoriteService {
     private readonly albumService: AlbumService,
   ) { } // prettier-ignore
 
-  addTrack(id: string): void {
+  async addTrack(id: string): Promise<void> {
     try {
-      const track = this.trackService.findOne(id);
+      const track = await this.trackService.findOne(id);
 
       if (track) {
         this.favTrackRepo.create({ id });
@@ -52,8 +52,8 @@ export class FavoriteService implements IFavoriteService {
     }
   }
 
-  deleteTrack(id: string): void {
-    const track = this.favTrackRepo.findById(id);
+  async deleteTrack(id: string): Promise<void> {
+    const track = await this.favTrackRepo.findById(id);
     if (!track) {
       throw new NotFoundException('Track with the id is not favorite');
     }
@@ -61,7 +61,7 @@ export class FavoriteService implements IFavoriteService {
     this.favTrackRepo.delete(id);
   }
 
-  addAlbum(id: string): void {
+  async addAlbum(id: string): Promise<void> {
     try {
       const album = this.albumService.findOne(id);
 
@@ -77,23 +77,23 @@ export class FavoriteService implements IFavoriteService {
     }
   }
 
-  deleteAlbum(id: string): void {
-    const album = this.favAlbumRepo.findById(id);
+  async deleteAlbum(id: string): Promise<void> {
+    const album = await this.favAlbumRepo.findById(id);
     if (!album) {
       throw new UnprocessableEntityException(
         'Album with the id is not favorite',
       );
     }
 
-    this.favAlbumRepo.delete(id);
+    await this.favAlbumRepo.delete(id);
   }
 
-  addArtist(id: string): void {
+  async addArtist(id: string): Promise<void> {
     try {
-      const artist = this.artistService.findOne(id);
+      const artist = await this.artistService.findOne(id);
 
       if (artist) {
-        this.favArtistRepo.create({ id });
+        await this.favArtistRepo.create({ id });
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -104,28 +104,33 @@ export class FavoriteService implements IFavoriteService {
     }
   }
 
-  deleteArtist(id: string): void {
-    const artist = this.favArtistRepo.findById(id);
+  async deleteArtist(id: string): Promise<void> {
+    const artist = await this.favArtistRepo.findById(id);
     if (!artist) {
       throw new UnprocessableEntityException(
         'Artist with the id is not favorite',
       );
     }
 
-    this.favArtistRepo.delete(id);
+    await this.favArtistRepo.delete(id);
   }
 
-  findAll() {
+  async findAll() {
     const fav = {
-      // TODO: unite
-      artists: Object.entries(this.favArtistRepo.findAll()).map(([, value]) =>
-        this.artistService.findOne(value.id),
+      artists: await Promise.all(
+        Object.entries(await this.favArtistRepo.findAll()).map(([, value]) =>
+          this.artistService.findOne(value.id),
+        ),
       ),
-      albums: Object.entries(this.favAlbumRepo.findAll()).map(([, value]) =>
-        this.albumService.findOne(value.id),
+      albums: await Promise.all(
+        Object.entries(await this.favAlbumRepo.findAll()).map(([, value]) =>
+          this.albumService.findOne(value.id),
+        ),
       ),
-      tracks: Object.entries(this.favTrackRepo.findAll()).map(([, value]) =>
-        this.trackService.findOne(value.id),
+      tracks: await Promise.all(
+        Object.entries(await this.favTrackRepo.findAll()).map(([, value]) =>
+          this.trackService.findOne(value.id),
+        ),
       ),
     };
 

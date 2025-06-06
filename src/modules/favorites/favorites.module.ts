@@ -1,9 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 
 import {
-  InMemoryFavAlbumRepository,
-  InMemoryFavArtistRepository,
-  InMemoryFavTrackRepository,
+  PersistentFavAlbumRepository,
+  PersistentFavArtistRepository,
+  PersistentFavTrackRepository,
 } from './repository/favorites.repository';
 import { FavoriteController } from './favorites.controller';
 import {
@@ -26,18 +26,18 @@ import { ArtistModule } from '../artist/artist.module';
     },
     {
       provide: FAV_ALBUM_REPO,
-      useClass: InMemoryFavAlbumRepository,
+      useClass: PersistentFavAlbumRepository,
     },
     {
       provide: FAV_ARTIST_REPO,
-      useClass: InMemoryFavArtistRepository,
+      useClass: PersistentFavArtistRepository,
     },
     {
       provide: FAV_TRACK_REPO,
-      useClass: InMemoryFavTrackRepository,
+      useClass: PersistentFavTrackRepository,
     },
   ],
   exports: [FAVORITE_SERVICE],
   imports: [forwardRef(() => TrackModule), forwardRef(() => AlbumModule), forwardRef(() => ArtistModule)],
 })
-export class FavoriteModule { } // prettier-ignore
+export class FavoriteModule { }

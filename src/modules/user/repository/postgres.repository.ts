@@ -9,6 +9,7 @@ import { PrismaClientKnownRequestError } from 'generated/prisma/runtime/library'
 export class PostgresUserRepository implements IUserRepo {
   constructor(private readonly prisma: PrismaService) { }
 
+
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
@@ -35,13 +36,17 @@ export class PostgresUserRepository implements IUserRepo {
   }
 
   async delete(id: string): Promise<boolean> {
+    console.log("delete user - ", id)
     const user = await this.prisma.user.findUnique({ where: { id } });
+    console.log(" user - ", user)
+
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
     try {
       await this.prisma.user.delete({ where: { id } });
+      console.log(" true - ")
       return true;
     } catch (error) {
       if (
@@ -54,11 +59,11 @@ export class PostgresUserRepository implements IUserRepo {
     }
   }
 
-  create(props: User): Promise<User> {
-    return this.prisma.user.create({ data: props });
+  async create(props: User): Promise<User> {
+    return await this.prisma.user.create({ data: props });
   }
 
-  findByLogin(login: string) {
-    return this.prisma.user.findUnique({ where: { login } });
+  async findByLogin(login: string) {
+    return await this.prisma.user.findUnique({ where: { login } });
   }
 }

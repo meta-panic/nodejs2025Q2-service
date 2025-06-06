@@ -1,3 +1,7 @@
+
+ docker compose -f docker-compose.yml build
+
+
 # Home Library Service
 
 ## Prerequisites
@@ -32,7 +36,7 @@ in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 After application running open new terminal and run tests one by one:
 
 ```
-npm test -- test/users.e2e.spec.ts
+  npm test -- test/users.e2e.spec.ts
 ```
 
 ```

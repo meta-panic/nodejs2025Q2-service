@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 
 import { IUserRepo, USER_REPO } from '../repository/user.repository.interface';
-import { generateUUID } from 'src/core/utils';
+import { generateTimestamp, generateUUID } from 'src/core/utils';
 import { User } from '../model/User.model';
 import { IUsersService } from './user.service.interface';
 import { plainToInstance } from 'class-transformer';
@@ -36,7 +36,7 @@ export class UsersService implements IUsersService {
   }
 
   async create(data: { login: string; password: string }) {
-    const currentDate = Date.now();
+    const currentDate = generateTimestamp();
 
     return await this.userRepo.create({
       login: data.login,
@@ -68,11 +68,14 @@ export class UsersService implements IUsersService {
       throw new ForbiddenException('Old password is not correct.');
     }
 
-    const result = this.userRepo.update(id, { password: newPassword });
-    this.userRepo.update(id, {
+    const result = await this.userRepo.update(id, { password: newPassword });
+    console.log("old createdAt - ", user.createdAt)
+    console.log("old updatedAt - ", user.updatedAt)
+    await this.userRepo.update(id, {
       version: user.version + 1,
-      updatedAt: Date.now(),
+      updatedAt: generateTimestamp(),
     });
+    console.log("new - ", user.updatedAt)
 
     return plainToInstance(ReturnUserDto, result, {
       excludeExtraneousValues: true,

@@ -19,6 +19,54 @@ model User {
   login     String @unique
   password  String
   version   Int
-  createdAt Int // timestamp of creation
-  updatedAt Int // timestamp of last update
+  createdAt Int
+  updatedAt Int
+}
+
+model Artist {
+  id     String  @id @default(uuid())
+  name   String
+  grammy Boolean
+
+  albums     Album[]     @relation("ArtistAlbums")
+  tracks     Track[]     @relation("ArtistTracks")
+  favArtists FavArtist[] @relation("FavArtistToArtists") // Many-to-many relation to FavArtist
+}
+
+model Album {
+  id       String  @id @default(uuid())
+  name     String
+  year     Int
+  artistId String? // nullable, refers to Artist
+
+  artist    Artist?    @relation("ArtistAlbums", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  tracks    Track[]    @relation("AlbumTracks")
+  favAlbums FavAlbum[] @relation("FavAlbumToAlbums") // Many-to-many relation to FavAlbum
+}
+
+model Track {
+  id       String  @id @default(uuid())
+  name     String
+  artistId String? // nullable, refers to Artist
+  albumId  String? // nullable, refers to Album
+  duration Int
+
+  artist    Artist?    @relation("ArtistTracks", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  album     Album?     @relation("AlbumTracks", fields: [albumId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for album
+  favTracks FavTrack[] @relation("FavTrackToTracks") // Many-to-many relation to FavTrack
+}
+
+model FavTrack {
+  id     String  @id @default("singleton") // Always use the same id
+  tracks Track[] @relation("FavTrackToTracks") // Many-to-many relation
+}
+
+model FavAlbum {
+  id     String  @id @default("singleton") // Always use the same id
+  albums Album[] @relation("FavAlbumToAlbums") // Many-to-many relation
+}
+
+model FavArtist {
+  id      String   @id @default("singleton") // Always use the same id
+  artists Artist[] @relation("FavArtistToArtists") // Many-to-many relation
 }

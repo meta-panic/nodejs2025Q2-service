@@ -1,29 +1,36 @@
 import { Injectable } from '@nestjs/common';
 
-import { InMemoryRepo } from 'src/core/repository/fakeRepo';
+import { PersistentRepo } from 'src/core/repository/persistentRepo';
 import {
   IFavAlbumRepo,
   IFavArtistRepo,
   IFavTrackRepo,
 } from './favorites.repository.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-/* eslint-disable prettier/prettier */
-export class InMemoryFavAlbumRepository
-  extends InMemoryRepo<{ id: string }>
-  implements IFavAlbumRepo {}
-/* eslint-enable prettier/prettier */
+export class PersistentFavAlbumRepository
+  extends PersistentRepo<{ id: string }>
+  implements IFavAlbumRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "favAlbum");
+  }
+}
 
 @Injectable()
-/* eslint-disable prettier/prettier */
-export class InMemoryFavArtistRepository
-  extends InMemoryRepo<{ id: string }>
-  implements IFavArtistRepo {}
-/* eslint-enable prettier/prettier */
+export class PersistentFavArtistRepository
+  extends PersistentRepo<{ id: string }>
+  implements IFavArtistRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "favArtist");
+  }
+}
 
 @Injectable()
-/* eslint-disable prettier/prettier */
-export class InMemoryFavTrackRepository
-  extends InMemoryRepo<{ id: string }>
-  implements IFavTrackRepo {}
-/* eslint-enable prettier/prettier */
+export class PersistentFavTrackRepository
+  extends PersistentRepo<{ id: string }>
+  implements IFavTrackRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "favTrack");
+  }
+}

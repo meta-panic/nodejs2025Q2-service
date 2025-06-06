@@ -10,6 +10,7 @@ services:
       dockerfile: configs/Dockerfile.backend
     ports:
       - "4000:4000"
+      - "5555:5555"
     volumes:
       - ${DEV_BACKEND_SRC_PATH}/src:/usr/app/src
       - ${DEV_BACKEND_SRC_PATH}/prisma:/usr/app/prisma

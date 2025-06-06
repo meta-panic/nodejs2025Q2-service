@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 import { Artist } from '../model/Artist.model';
 import { IArtistRepo } from './artist.repository.interface';
-import { InMemoryRepo } from 'src/core/repository/fakeRepo';
+import { PersistentRepo } from 'src/core/repository/persistentRepo';
 
 @Injectable()
-export class InMemoryArtistRepository
-  extends InMemoryRepo<Artist>
-  implements IArtistRepo {}
+export class PersistentArtistRepository
+  extends PersistentRepo<Artist>
+  implements IArtistRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "artist");
+  }
+}

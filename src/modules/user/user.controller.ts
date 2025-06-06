@@ -25,7 +25,7 @@ export class UsersController {
   constructor(
     @Inject(USER_SERVICE)
     private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
@@ -89,6 +89,7 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Bad request (invalid userId).' })
   @ApiResponse({ status: 404, description: 'User not found.' })
   deleteById(@Param('id', new ParseUUIDPipe()) id: string) {
+
     return this.usersService.delete(id);
   }
 }

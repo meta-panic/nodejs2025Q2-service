@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
-import { generateUUID, nullifyEntityInField } from 'src/core/utils';
+import { generateUUID } from 'src/core/utils';
 import { ReturnArtistDto } from '../dto/return-artist';
 import {
   ARTIST_REPO,
@@ -30,8 +30,8 @@ export class ArtistService implements IArtistService {
     private readonly favoriteService: FavoriteService,
   ) { } // prettier-ignore
 
-  findAll() {
-    const responce = this.artistRepo.findAll().map((user) => {
+  async findAll() {
+    const responce = (await this.artistRepo.findAll()).map((user) => {
       return plainToInstance(ReturnArtistDto, user, {
         excludeExtraneousValues: true,
       });
@@ -40,40 +40,32 @@ export class ArtistService implements IArtistService {
     return responce;
   }
 
-  findOne(id: string) {
-    const artist = this.artistRepo.findById(id);
+  async findOne(id: string) {
+    const artist = await this.artistRepo.findById(id);
 
-    if (!artist) throw new NotFoundException('User Not Found');
+    if (!artist) throw new NotFoundException('Artist Not Found');
 
     return plainToInstance(ReturnArtistDto, artist, {
       excludeExtraneousValues: true,
     });
   }
 
-  create(data: { name: string; grammy: boolean }) {
-    return this.artistRepo.create({
+  async create(data: { name: string; grammy: boolean }) {
+    return await this.artistRepo.create({
       name: data.name,
       grammy: data.grammy,
       id: generateUUID(),
     });
   }
 
-  update(id: string, updateProps: Partial<Artist>) {
-    this.artistRepo.update(id, updateProps);
+  async update(id: string, updateProps: Partial<Artist>) {
+    await this.artistRepo.update(id, updateProps);
   }
 
-  delete(id: string) {
-    const isSuccess = this.artistRepo.delete(id);
+  async delete(id: string) {
+    const isSuccess = await this.artistRepo.delete(id);
 
-    if (isSuccess) {
-      try {
-        nullifyEntityInField(this.albumService, id, 'artistId');
-        nullifyEntityInField(this.trackService, id, 'artistId');
-        this.favoriteService.deleteArtist(id);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    console.log("isSuccess - ", isSuccess)
 
     return isSuccess;
   }
