@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
@@ -10,25 +10,14 @@ import {
 } from '../repository/artist.repository.interface';
 import { IArtistService } from './artist.service.interface';
 import { Artist } from '../model/Artist.model';
-import { AlbumService } from 'src/modules/album/service/album.service';
-import { ALBUM_SERVICE } from 'src/modules/album/service/album.service.interface';
-import { TrackService } from 'src/modules/track/service/track.service';
-import { TRACK_SERVICE } from 'src/modules/track/service/track.service.interface';
-import { FAVORITE_SERVICE } from 'src/modules/favorites/service/favorite.service.interface';
-import { FavoriteService } from 'src/modules/favorites/service/favorite.service';
+
 
 @Injectable()
 export class ArtistService implements IArtistService {
   constructor(
     @Inject(ARTIST_REPO)
-    private readonly artistRepo: IArtistRepo,
-    @Inject(forwardRef(() => ALBUM_SERVICE))
-    private readonly albumService: AlbumService,
-    @Inject(forwardRef(() => TRACK_SERVICE))
-    private readonly trackService: TrackService,
-    @Inject(forwardRef(() => FAVORITE_SERVICE))
-    private readonly favoriteService: FavoriteService,
-  ) { } // prettier-ignore
+    private readonly artistRepo: IArtistRepo
+  ) { }
 
   async findAll() {
     const responce = (await this.artistRepo.findAll()).map((user) => {
