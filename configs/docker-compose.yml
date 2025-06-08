@@ -9,8 +9,8 @@ services:
       context: ../
       dockerfile: configs/Dockerfile.backend
     ports:
-      - "4000:4000"
-      - "5555:5555"
+      - "${PORT}:${PORT}" 
+      - "${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}"
     volumes:
       - ${DEV_BACKEND_SRC_PATH}/src:/usr/app/src
       - ${DEV_BACKEND_SRC_PATH}/prisma:/usr/app/prisma
@@ -20,13 +20,14 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_CLIENT: postgres
-      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:${DATABASE_PORT}/${DATABASE_NAME}
-      WDS_SOCKET_HOST: 127.0.0.1
-      CHOKIDAR_USEPOLLING: 1
-      TS_NODE_DEV: true
-      WATCHPACK_POLLING: true
-      NODE_ENV: development
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_URL: ${DATABASE_CLIENT}://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:${DATABASE_PORT}/${DATABASE_NAME}
+      NODE_ENV: ${NODE_ENV}
+      # This is for hot reloading between windows-linux machines
+      WDS_SOCKET_HOST: ${WDS_SOCKET_HOST}
+      CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING}
+      TS_NODE_DEV: ${TS_NODE_DEV}
+      WATCHPACK_POLLING: ${WATCHPACK_POLLING}
     networks:
       - network_db
   db:
@@ -39,7 +40,7 @@ services:
       start_period: 30s
     restart: always
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}" 
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USER: ${DATABASE_USERNAME}
