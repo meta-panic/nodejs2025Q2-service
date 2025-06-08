@@ -9,12 +9,13 @@ This project uses environment variables for configuration. A `.env.example` file
 To get the application running quickly with Docker:
 
 1.  `git clone https://github.com/meta-panic/nodejs2025Q2-service.git`
-2.  `git checkout feature/dockerization`
-3.  **Navigate to the `configs/` directory**: `cd configs`
-4.  **Copy `.env.example` to `.env`** in the `configs/` directory and set your environment variables.
-5.  **Build images**: `docker compose -f docker-compose.yml build`
-6.  **Start containers**: `docker compose -f docker-compose.yml up`
-7.  **Run tests(in docker container!!!)**: `npm run test`
+2.  **Navigate to the `nodejs2025Q2-service` directory**: `cd nodejs2025Q2-service`
+3.  `git checkout feature/dockerization`
+4.  **Navigate to the `configs/` directory**: `cd configs`
+5.  **Copy `.env.example` to `.env`** in the `configs/` directory and set your environment variables.
+6.  **Build images**: `docker compose -f docker-compose.yml build`
+7.  **Start containers**: `docker compose -f docker-compose.yml up`
+8.  **Run tests(in docker container!!!)**: `npm run test`
 
 ## Downloading
 
