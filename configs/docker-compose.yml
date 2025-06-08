@@ -12,9 +12,7 @@ services:
       - "${PORT}:${PORT}" 
       - "${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}"
     volumes:
-      - ${DEV_BACKEND_SRC_PATH}/src:/usr/app/src
-      - ${DEV_BACKEND_SRC_PATH}/prisma:/usr/app/prisma
-      - ${DEV_BACKEND_SRC_PATH}/test:/usr/app/test
+      - ../src:/usr/app/src
     environment:
       PORT: ${PORT}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
