@@ -5,8 +5,7 @@ import { IUserRepo, USER_REPO } from '../repository/user.repository.interface';
 import { generateTimestamp, generateUUID } from 'src/core/utils';
 import { User } from '../model/User.model';
 import { IUsersService } from './user.service.interface';
-import { plainToInstance } from 'class-transformer';
-import { ReturnUserDto } from '../dto/return-user';
+
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -15,12 +14,16 @@ export class UsersService implements IUsersService {
     private readonly userRepo: IUserRepo,
   ) { }
 
+  async findByLogin(login: string): Promise<User> {
+    const user = await this.userRepo.findByLogin(login);
+
+    if (!user) throw new NotFoundException('User Not Found');
+
+    return user;
+  }
+
   async findAll() {
-    const responce = (await this.userRepo.findAll()).map((user) => {
-      return plainToInstance(ReturnUserDto, user, {
-        excludeExtraneousValues: true,
-      });
-    });
+    const responce = (await this.userRepo.findAll());
 
     return responce;
   }
@@ -30,9 +33,7 @@ export class UsersService implements IUsersService {
 
     if (!user) throw new NotFoundException('User Not Found');
 
-    return plainToInstance(ReturnUserDto, user, {
-      excludeExtraneousValues: true,
-    });
+    return user;
   }
 
   async create(data: { login: string; password: string }) {
@@ -74,8 +75,6 @@ export class UsersService implements IUsersService {
       updatedAt: generateTimestamp(),
     });
 
-    return plainToInstance(ReturnUserDto, result, {
-      excludeExtraneousValues: true,
-    });
+    return result;
   }
 }
