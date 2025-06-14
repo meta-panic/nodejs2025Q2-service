@@ -1,10 +1,14 @@
-import { Controller, Inject, Post, Body, ValidationPipe } from "@nestjs/common";
+import { Controller, Inject, Post, Body, ValidationPipe, HttpCode, UnauthorizedException, UsePipes } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthService } from "./service/auth.service";
 import { AUTH_SERVICE } from "./service/auth.service.interface";
 import { SignupDto } from "./dto/in/signup";
 import { RefreshDto } from "./dto/in/refresh";
 import { Public } from "src/core/decorators/public";
+import { plainToInstance } from "class-transformer";
+import { ReturnTokensDto } from "./dto/out/return-tokens";
+import { decode } from "jsonwebtoken";
+import { UnauthorizedValidationPipe } from "./decorators/UnauthorizedValidationPipe";
 
 
 @ApiTags('auth')
@@ -24,10 +28,10 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: 'Data is not valid, user cannot be registered.' })
   async signup(@Body(ValidationPipe) dto: SignupDto) {
-    const kek = await this.authService.signup(dto);;
-    console.log(kek)
-    return kek;
+    const response = await this.authService.signup(dto);;
+    return response;
   }
+
 
   @Public()
   @Post('/login')
@@ -42,16 +46,22 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+
   @Public()
   @Post('/refresh')
-  @ApiOperation({ summary: 'Login' })
+  @HttpCode(200)
+  @UsePipes(new UnauthorizedValidationPipe())
+  @ApiOperation({ summary: 'Refresh' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'User is valid and unique.',
   })
   @ApiResponse({ status: 400, description: 'Data is not valid, user cannot login.' })
   @ApiResponse({ status: 403, description: 'No user with such data found.' })
-  refresh(@Body(ValidationPipe) dto: RefreshDto) {
-    return this.authService.refresh(dto.login);
+  async refresh(@Body() dto: RefreshDto) {
+    const tokens = await this.authService.refresh(dto.refreshToken);
+    return plainToInstance(ReturnTokensDto, tokens, {
+      excludeExtraneousValues: true,
+    });
   }
 }

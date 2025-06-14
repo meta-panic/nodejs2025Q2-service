@@ -62,11 +62,9 @@ export class AuthService implements IAuthService {
       const decoded = verify(refreshToken, process.env.JWT_SECRET_REFRESH_KEY) as { login: string; userId: string };
 
       const tokens = await getTokens(decoded.login, decoded.userId, process.env.JWT_SECRET_KEY);
-      return plainToInstance(ReturnTokensDto, tokens, {
-        excludeExtraneousValues: true,
-      });
+      return tokens;
     } catch (error) {
-      throw new UnprocessableEntityException('Invalid refresh token');
+      throw new ForbiddenException('Invalid refresh token');
     }
   }
 }
