@@ -10,12 +10,13 @@ To get the application running quickly with Docker:
 
 1.  `git clone https://github.com/meta-panic/nodejs2025Q2-service.git`
 2.  **Navigate to the `nodejs2025Q2-service` directory**: `cd nodejs2025Q2-service`
-3.  `git checkout feature/dockerization`
+3.  `git checkout feature/auth-and-logger`
 4.  **Navigate to the `configs/` directory**: `cd configs`
 5.  **Copy `.env.example` to `.env`** in the `configs/` directory and set your environment variables.
 6.  **Build images**: `docker compose -f docker-compose.yml build`
 7.  **Start containers**: `docker compose -f docker-compose.yml up`
-8.  **Run tests(in docker container!!!)**: `npm run test`
+8.  **Run auth tests(in docker container!!!)**: `npx cross-env TEST_MODE=auth jest --testPathIgnorePatterns refresh.e2e.spec.ts --runInBand --silent=false`
+9. **Run refresh token tests(in docker container!!!)**: `npx cross-env TEST_MODE=auth jest refresh.e2e.spec.ts --runInBand --silent=false`
 
 ## Downloading
 
