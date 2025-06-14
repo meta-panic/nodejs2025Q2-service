@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Body, ValidationPipe, HttpCode, UnauthorizedException, UsePipes } from "@nestjs/common";
+import { Controller, Inject, Post, Body, ValidationPipe, HttpCode, UsePipes } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthService } from "./service/auth.service";
 import { AUTH_SERVICE } from "./service/auth.service.interface";
@@ -7,7 +7,6 @@ import { RefreshDto } from "./dto/in/refresh";
 import { Public } from "src/core/decorators/public";
 import { plainToInstance } from "class-transformer";
 import { ReturnTokensDto } from "./dto/out/return-tokens";
-import { decode } from "jsonwebtoken";
 import { UnauthorizedValidationPipe } from "./decorators/UnauthorizedValidationPipe";
 
 

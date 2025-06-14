@@ -13,6 +13,7 @@ import { CoreModule } from './core/core.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './core/guards/authGuard';
 
+
 @Module({
   imports: [CoreModule, AuthModule, PrismaModule, UsersModule, ArtistModule, AlbumModule, TrackModule, FavoriteModule, AuthModule, PrismaModule],
   controllers: [AppController],

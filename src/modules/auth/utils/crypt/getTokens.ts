@@ -1,4 +1,4 @@
-import { sign } from "jsonwebtoken";
+import { sign } from 'jsonwebtoken';
 
 
 const signJWT = async (login: string, id: string, secret: string): Promise<{ accessToken: string; refreshToken: string }> => {
@@ -11,7 +11,7 @@ const signJWT = async (login: string, id: string, secret: string): Promise<{ acc
       process.env.JWT_SECRET_REFRESH_KEY || secret,
       {
         algorithm: 'HS256',
-        expiresIn: '15m' // Access token expires in 15 minutes
+        expiresIn: process.env.TOKEN_EXPIRE_TIME
       },
       (err, token) => {
         if (err) reject(err);
@@ -29,7 +29,7 @@ const signJWT = async (login: string, id: string, secret: string): Promise<{ acc
       process.env.JWT_SECRET_REFRESH_KEY || secret,
       {
         algorithm: 'HS256',
-        expiresIn: '7d' // Refresh token expires in 7 days
+        expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME
       },
       (err, token) => {
         if (err) reject(err);
