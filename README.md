@@ -66,31 +66,19 @@ No local development is set-up.
 
 After application run inside docker, run tests one by one:
 
-```
-npm test -- test/users.e2e.spec.ts
-```
+To test auth:
 
 ```
-npm test -- test/artists.e2e.spec.ts
+npx cross-env TEST_MODE=auth jest --testPathIgnorePatterns refresh.e2e.spec.ts --runInBand --silent=false
 ```
 
-```
-npm test -- test/albums.e2e.spec.ts
-```
+To test refresh token:
 
 ```
-npm test -- test/favorites.e2e.spec.ts
+npx cross-env TEST_MODE=auth jest refresh.e2e.spec.ts --runInBand --silent=false
 ```
 
-```
-npm test -- test/tracks.e2e.spec.ts
-```
 
-or all tests at once:
-
-```
-npm test
-```
 
 ### Linting
 

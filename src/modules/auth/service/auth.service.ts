@@ -6,9 +6,9 @@ import { ReturnTokensDto } from '../dto/out/return-tokens';
 
 import { IAuthService } from './auth.service.interface';
 import { Tokens } from '../model/Tokens.model';
-import getTokens from 'src/core/crypt/getTokens';
-import validatePassword from 'src/core/crypt/validatePassword';
-import saltPassword from 'src/core/crypt/saltPassword';
+import getTokens from 'src/modules/auth/utils/crypt/getTokens';
+import validatePassword from 'src/modules/auth/utils/crypt/validatePassword';
+import saltPassword from 'src/modules/auth/utils/crypt/saltPassword';
 import { AfterRegistrationDto } from '../dto/out/afterRegistration';
 import { IUsersService, USER_SERVICE } from 'src/modules/user/service/user.service.interface';
 
