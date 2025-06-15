@@ -98,13 +98,3 @@ export class LoggerService implements ILoggerService {
   }
 }
 
-function assertValidLogLevel(level: number): LogLevel {
-  if (typeof level !== 'number') {
-    throw new Error(`Invalid log level: ${level}. Must be number between 0 and 5.`);
-  }
-  if (level >= LogLevel.VERBOSE && level <= LogLevel.FATAL) {
-    return level as LogLevel;
-  }
-
-  throw new Error(`Invalid log level: ${level}. Must be between 0 and 5.`);
-}

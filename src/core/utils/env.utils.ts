@@ -4,7 +4,6 @@ import { LogLevel } from '../consts/logLevels';
 
 export function getOutputDestination(): 'stdout' | 'file' {
   const envValue = process.env.OUTPUT_DESTINATION?.toLowerCase();
-  console.log("envValue - ", envValue)
   return envValue === 'stdout' || envValue === 'file' ? envValue : OUTPUT_DESTINATION;
 }
 
