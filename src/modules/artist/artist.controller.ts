@@ -26,7 +26,7 @@ export class ArtistController {
   constructor(
     @Inject(ARTIST_SERVICE)
     private readonly artistService: ArtistService,
-  ) { } // prettier-ignore
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new artist' })

@@ -18,7 +18,7 @@ export class FavoriteController {
   constructor(
     @Inject(FAVORITE_SERVICE)
     private readonly favoriteService: FavoriteService,
-  ) { } // prettier-ignore
+  ) { }
 
   @Get()
   @ApiOperation({ summary: 'Get all favorites' })

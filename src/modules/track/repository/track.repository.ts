@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
 import { Track } from '../model/Track.model';
-import { InMemoryRepo } from 'src/core/repository/fakeRepo';
 import { ITrackRepo } from './track.repository.interface';
+import { PersistentRepo } from 'src/core/repository/persistentRepo';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-/* eslint-disable prettier/prettier */
-export class InMemoryTrackRepository
-  extends InMemoryRepo<Track>
-  implements ITrackRepo {}
-/* eslint-enable prettier/prettier */
+export class PersistentTrackRepository
+  extends PersistentRepo<Track>
+  implements ITrackRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "track");
+  }
+}

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import { InMemoryUserRepository } from './repository/user.repository';
 import { UsersController } from './user.controller';
 import { UsersService } from './service/user.service';
 import { USER_REPO } from './repository/user.repository.interface';
 import { USER_SERVICE } from './service/user.service.interface';
+import { PostgresUserRepository } from './repository/postgres.repository';
 
 @Module({
   controllers: [UsersController],
@@ -15,8 +15,9 @@ import { USER_SERVICE } from './service/user.service.interface';
     },
     {
       provide: USER_REPO,
-      useClass: InMemoryUserRepository,
+      useClass: PostgresUserRepository,
     },
   ],
+  imports: [],
 })
-export class UsersModule {}
+export class UsersModule { }

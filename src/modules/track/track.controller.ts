@@ -25,7 +25,7 @@ export class TrackController {
   constructor(
     @Inject(TRACK_SERVICE)
     private readonly trackService: TrackService,
-  ) { } // prettier-ignore
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new track' })

@@ -7,10 +7,11 @@ import { ArtistModule } from './modules/artist/artist.module';
 import { AlbumModule } from './modules/album/album.module';
 import { TrackModule } from './modules/track/track.module';
 import { FavoriteModule } from './modules/favorites/favorites.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [UsersModule, ArtistModule, AlbumModule, TrackModule, FavoriteModule],
+  imports: [PrismaModule, UsersModule, ArtistModule, AlbumModule, TrackModule, FavoriteModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { } // prettier-ignore
+export class AppModule { }
