@@ -19,5 +19,6 @@ import { PostgresUserRepository } from './repository/postgres.repository';
     },
   ],
   imports: [],
+  exports: [USER_SERVICE],
 })
 export class UsersModule { }

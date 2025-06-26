@@ -6,7 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 
 export class PersistentRepo<T extends { id: string }> implements IRepoAsync<T> {
-  constructor(private readonly prisma: PrismaService, private readonly entityName: string) { }
+  constructor(protected readonly prisma: PrismaService, private readonly entityName: string) { }
 
   findAll(): Promise<T[]> {
     return this.prisma[this.entityName].findMany();

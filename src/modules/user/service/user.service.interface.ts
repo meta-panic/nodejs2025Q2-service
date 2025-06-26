@@ -11,6 +11,7 @@ export interface IUsersService {
     id: string,
     { oldPassword, newPassword }: ChangePassword,
   ): Promise<User>;
+  findByLogin(logon: string): Promise<User>;
 }
 
 export const USER_SERVICE = 'USER_SERVICE';

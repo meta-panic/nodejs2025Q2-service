@@ -9,7 +9,7 @@ COPY . .
 RUN echo "rm -rf node_*****modules"
 RUN rm -rf node_modules
 
-RUN npm ci --omit=dev
+RUN npm ci
 RUN npx prisma generate
 
 RUN npm run prebuild
