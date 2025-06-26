@@ -10,7 +10,7 @@ To get the application running quickly with Docker:
 
 1.  `git clone https://github.com/meta-panic/nodejs2025Q2-service.git`
 2.  **Navigate to the `nodejs2025Q2-service` directory**: `cd nodejs2025Q2-service`
-3.  `git checkout feature/auth-and-logger`
+3.  `git checkout develop`
 4.  **Navigate to the `configs/` directory**: `cd configs`
 5.  **Copy `.env.example` to `.env`** in the `configs/` directory and set your environment variables.
 6.  **Build images**: `docker compose -f docker-compose.yml build`
