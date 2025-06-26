@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
 import { Album } from '../model/Album.model';
-import { InMemoryRepo } from 'src/core/repository/fakeRepo';
+import { PersistentRepo } from 'src/core/repository/persistentRepo';
 import { IAlbumRepo } from './album.repository.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-/* eslint-disable prettier/prettier */
-export class InMemoryAlbumRepository
-  extends InMemoryRepo<Album>
-  implements IAlbumRepo { }
-/* eslint-enable prettier/prettier */
+export class PersistentAlbumRepository
+  extends PersistentRepo<Album>
+  implements IAlbumRepo {
+  constructor(prisma: PrismaService) {
+    super(prisma, "album");
+  }
+}

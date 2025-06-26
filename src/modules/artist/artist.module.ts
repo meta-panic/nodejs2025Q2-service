@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 
-import { InMemoryArtistRepository } from './repository/artist.repository';
+import { PersistentArtistRepository } from './repository/artist.repository';
 import { ArtistService } from './service/artist.service';
 import { ARTIST_SERVICE } from './service/artist.service.interface';
 import { ArtistController } from './artist.controller';
@@ -18,7 +18,7 @@ import { FavoriteModule } from '../favorites/favorites.module';
     },
     {
       provide: ARTIST_REPO,
-      useClass: InMemoryArtistRepository,
+      useClass: PersistentArtistRepository,
     },
   ],
   exports: [ARTIST_SERVICE],
@@ -28,4 +28,4 @@ import { FavoriteModule } from '../favorites/favorites.module';
     forwardRef(() => FavoriteModule),
   ],
 })
-export class ArtistModule {}
+export class ArtistModule { }

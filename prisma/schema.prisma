@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  //output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String @id @default(uuid()) // uuid v4
+  login     String @unique
+  password  String
+  version   Int
+  createdAt Int
+  updatedAt Int
+}
+
+model Artist {
+  id     String  @id @default(uuid())
+  name   String
+  grammy Boolean
+
+  albums     Album[]     @relation("ArtistAlbums")
+  tracks     Track[]     @relation("ArtistTracks")
+  favArtists Favorites[] @relation("FavoritesArtists")
+}
+
+model Album {
+  id       String  @id @default(uuid())
+  name     String
+  year     Int
+  artistId String? // nullable, refers to Artist
+
+  artist    Artist?     @relation("ArtistAlbums", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  tracks    Track[]     @relation("AlbumTracks")
+  favAlbums Favorites[] @relation("FavoritesAlbums")
+}
+
+model Track {
+  id       String  @id @default(uuid())
+  name     String
+  artistId String? // nullable, refers to Artist
+  albumId  String? // nullable, refers to Album
+  duration Int
+
+  artist    Artist?     @relation("ArtistTracks", fields: [artistId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for artist
+  album     Album?      @relation("AlbumTracks", fields: [albumId], references: [id], onDelete: SetNull) // ON DELETE SET NULL for album
+  favTracks Favorites[] @relation("FavoritesTracks")
+}
+
+model Favorites {
+  id      String   @id @default("global")
+  artists Artist[] @relation("FavoritesArtists")
+  albums  Album[]  @relation("FavoritesAlbums")
+  tracks  Track[]  @relation("FavoritesTracks")
+}

@@ -25,7 +25,7 @@ export class UsersController {
   constructor(
     @Inject(USER_SERVICE)
     private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
@@ -47,8 +47,14 @@ export class UsersController {
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Return all users.' })
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    const allUsers = await this.usersService.findAll();
+
+    return allUsers.map((user) => {
+      return plainToInstance(ReturnUserDto, user, {
+        excludeExtraneousValues: true,
+      });
+    });
   }
 
   @Get(':id')
@@ -57,7 +63,11 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Bad request (invalid userId).' })
   @ApiResponse({ status: 404, description: 'User not found.' })
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.findOne(id);
+    const user = this.usersService.findOne(id);
+
+    return plainToInstance(ReturnUserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @Put(':id')
@@ -76,7 +86,11 @@ export class UsersController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body(ValidationPipe) dto: UpdatePasswordDto,
   ) {
-    return this.usersService.updatePassword(id, dto);
+    const result = this.usersService.updatePassword(id, dto);
+
+    return plainToInstance(ReturnUserDto, result, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @HttpCode(204)
@@ -89,6 +103,7 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Bad request (invalid userId).' })
   @ApiResponse({ status: 404, description: 'User not found.' })
   deleteById(@Param('id', new ParseUUIDPipe()) id: string) {
+
     return this.usersService.delete(id);
   }
 }

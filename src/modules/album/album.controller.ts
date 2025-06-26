@@ -25,7 +25,7 @@ export class AlbumController {
   constructor(
     @Inject(ALBUM_SERVICE)
     private readonly albumService: AlbumService,
-  ) { } // prettier-ignore
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new album' })

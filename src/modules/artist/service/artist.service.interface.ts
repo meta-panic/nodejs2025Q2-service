@@ -1,11 +1,11 @@
 import { Artist } from '../model/Artist.model';
 
 export interface IArtistService {
-  findAll(): Artist[];
-  findOne(id: string): Artist;
-  create(data: { name: string; grammy: boolean }): Artist;
-  update(id: string, updateProps: Partial<Artist>): void;
-  delete(id: string): boolean;
+  findAll(): Promise<Artist[]>;
+  findOne(id: string): Promise<Artist>;
+  create(data: { name: string; grammy: boolean }): Promise<Artist>;
+  update(id: string, updateProps: Partial<Artist>): Promise<void>;
+  delete(id: string): Promise<boolean>;
 }
 
 export const ARTIST_SERVICE = 'ARTIST_SERVICE';
